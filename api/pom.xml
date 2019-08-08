@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!--
    Copyright 2012 International Business Machines Corp.
 
@@ -16,32 +18,68 @@
 
    SPDX-License-Identifier: Apache-2.0
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <groupId>jakarta.batch</groupId>
-        <artifactId>batch-api-parent</artifactId>
-        <version>1.0</version>
+        <groupId>org.jboss</groupId>
+        <artifactId>jboss-parent</artifactId>
+        <version>34</version>
     </parent>
 
-    <groupId>jakarta.batch</groupId>
-    <artifactId>jakarta.batch-api</artifactId>
-    <packaging>jar</packaging>
-    <version>1.0.2</version>
+    <groupId>org.jboss.spec.javax.batch</groupId>
+    <artifactId>jboss-batch-api_1.0_spec</artifactId>
+    <version>2.0.0.Final</version>
+
     <name>Jakarta Batch API</name>
+    <packaging>jar</packaging>
+
+    <properties>
+        <batch.spec.title>Jakarta Batch</batch.spec.title>
+        <batch.spec.vendor>IBM</batch.spec.vendor>
+        <batch.spec.version>1.0</batch.spec.version>
+
+        <batch.api.version>1.0.2</batch.api.version>
+        <version.jakarta.enterprise.jakarta.enterprise.cdi-api>2.0.1</version.jakarta.enterprise.jakarta.enterprise.cdi-api>
+        <version.jakarta.inject.jakarta.inject-api>1.0</version.jakarta.inject.jakarta.inject-api>
+    </properties>
+
+    <scm>
+        <connection>scm:git:git@github.com:jboss/jboss-jakarta-batch-api_spec.git</connection>
+        <developerConnection>scm:git:git@github.com:jboss/jboss-jakarta-batch-api_spec.git</developerConnection>
+        <url>https://github.com/jboss/jboss-jakarta-batch-api_spec</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>http://repository.jboss.org/licenses/apache-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <dependencies>
         <dependency>
-            <groupId>jakarta.inject</groupId>
-            <artifactId>jakarta.inject-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
-            <scope>provided</scope>
+            <version>${version.jakarta.enterprise.jakarta.enterprise.cdi-api}</version>
         </dependency>
+
+        <dependency>
+            <groupId>jakarta.inject</groupId>
+            <artifactId>jakarta.inject-api</artifactId>
+            <version>${version.jakarta.inject.jakarta.inject-api}</version>
+        </dependency>
+
+        <!--
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <version>${version.javax.enterprise.cdi-api}</version>
+        </dependency>
+        -->
     </dependencies>
 
     <build>
@@ -56,77 +94,68 @@
             </resource>
         </resources>
         <plugins>
+            <!-- Generate the OSGi jar Manifest. -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>sources-as-resources</id>
-                        <phase>package</phase>
+                        <id>bundle-manifest</id>
+                        <phase>process-classes</phase>
                         <goals>
-                            <goal>copy-resources</goal>
+                            <goal>manifest</goal>
                         </goals>
-                        <configuration>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/java</directory>
-                                </resource>
-                            </resources>
-                            <outputDirectory>${project.build.directory}/sources</outputDirectory>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultSpecificationEntries>false</addDefaultSpecificationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Automatic-Module-Name>beta.jboss.batch.api_1_0</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                    <instructions>
+                        <Specification-Title>${batch.spec.title}</Specification-Title>
+                        <Specification-Vendor>${batch.spec.vendor}</Specification-Vendor>
+                        <Specification-Version>${batch.spec.version}</Specification-Version>
+                        <Extension-Name>javax.batch</Extension-Name>
+                        <Implementation-URL>${project.scm.url}</Implementation-URL>
+                        <!-- Set the package version to match the spec version -->
+                        <Export-Package>
+                            javax.batch.*;version=${batch.spec.version}
+                        </Export-Package>
+                        <Import-Package>javax.enterprise.util;resolution:=optional,javax.inject;resolution:=optional
+                        </Import-Package>
+                    </instructions>
+                </configuration>
             </plugin>
+            <!-- Add the OSGi Manifest to the main jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
                     <archive>
-                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
                     </archive>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
-                    <bottom>
-                    <![CDATA[
-                    <p align="left">&#169; Copyright IBM Corp. 2014, 2019.<br>Use is subject to
-    <a href="{@docRoot}/doc-files/EFSL.html" target="_top">license terms</a>.]]>
-                    </bottom>
-                    <docfilessubdirs>true</docfilessubdirs>
-                    <doctitle>Jakarta Batch ${project.version} API</doctitle>
-                    <windowtitle>Jakarta Batch ${project.version} API</windowtitle>
+                    <archive>
+                        <manifestEntries>
+                            <Specification-Title>${batch.spec.title}</Specification-Title>
+                            <Specification-Vendor>${batch.spec.title}</Specification-Vendor>
+                            <Specification-Version>${batch.spec.version}</Specification-Version>
+                        </manifestEntries>
+                    </archive>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
 
 </project>
-
-
