@@ -21,9 +21,7 @@ package javax.batch.runtime;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ServiceLoader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import javax.batch.operations.BatchRuntimeException;
 import javax.batch.operations.JobOperator;
 
 /**
@@ -32,45 +30,33 @@ import javax.batch.operations.JobOperator;
  *
  */
 public class BatchRuntime {
-
-    private final static String sourceClass = BatchRuntime.class.getName();
-    private final static Logger logger = Logger.getLogger(sourceClass);
-
 	/**
-	* The getJobOperator factory method returns
-	* an instance of the JobOperator interface.
-	*
-	* @return JobOperator instance.
-	*/
+	 * The getJobOperator factory method returns
+	 * an instance of the JobOperator interface.
+	 *
+	 * @return JobOperator instance.
+	 */
 	public static JobOperator getJobOperator() {
-
-
-		JobOperator operator = AccessController.doPrivileged(new PrivilegedAction<JobOperator> () {
-            public JobOperator run() {
-
-            	ServiceLoader<JobOperator> loader = ServiceLoader.load(JobOperator.class);
-            	JobOperator returnVal = null;
-            	for (JobOperator provider : loader) {
-        			if (provider != null) {
-        				if (logger.isLoggable(Level.FINE)) {
-        					logger.fine("Loaded BatchContainerServiceProvider with className = " + provider.getClass().getCanonicalName());
-        				}
-        				// Use first one
-        				returnVal = provider;
-        				break;
-        			}
-        		}
-
-                return returnVal;
-            }
-        });
-
-
-		if (operator == null) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("The ServiceLoader was unable to find an implementation for JobOperator. Check classpath for META-INF/services/javax.batch.operations.JobOperator file.");
+		JobOperator jobOperator = null;
+		if (System.getSecurityManager() == null) {
+			for(JobOperator op : ServiceLoader.load(JobOperator.class)) {
+				jobOperator = op;
+				break;
 			}
+		} else {
+			jobOperator = AccessController.doPrivileged(new PrivilegedAction<JobOperator>() {
+				public JobOperator run() {
+					for (JobOperator op : ServiceLoader.load(JobOperator.class)) {
+						return op;
+					}
+					return null;
+				}
+			});
 		}
-		return operator;
+
+		if (jobOperator == null) {
+			throw new BatchRuntimeException("The ServiceLoader was unable to find an implementation for JobOperator. Check classpath for META-INF/services/javax.batch.operations.JobOperator file.");
+		}
+		return jobOperator;
 	}
 }
