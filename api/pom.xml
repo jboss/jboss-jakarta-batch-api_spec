@@ -25,14 +25,14 @@
     <parent>
         <groupId>org.jboss</groupId>
         <artifactId>jboss-parent</artifactId>
-        <version>34</version>
+        <version>35</version>
     </parent>
 
     <groupId>org.jboss.spec.javax.batch</groupId>
     <artifactId>jboss-batch-api_1.0_spec</artifactId>
-    <version>2.0.0.Final</version>
+    <version>2.0.0.Final-SNAPSHOT</version>
 
-    <name>Jakarta Batch API</name>
+    <name>JBoss Jakarta Batch API 1.0</name>
     <packaging>jar</packaging>
 
     <properties>
@@ -75,9 +75,9 @@
 
         <!--
         <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-            <version>${version.javax.enterprise.cdi-api}</version>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
         </dependency>
         -->
     </dependencies>
