@@ -33,6 +33,7 @@
     <version>2.0.0.Final-SNAPSHOT</version>
 
     <name>JBoss Jakarta Batch API 1.0</name>
+    <url>https://github.com/jboss/jboss-jakarta-batch-api_spec</url>
     <packaging>jar</packaging>
 
     <properties>
@@ -43,6 +44,8 @@
         <batch.api.version>1.0.2</batch.api.version>
         <version.jakarta.enterprise.jakarta.enterprise.cdi-api>2.0.1</version.jakarta.enterprise.jakarta.enterprise.cdi-api>
         <version.jakarta.inject.jakarta.inject-api>1.0</version.jakarta.inject.jakarta.inject-api>
+
+        <display.name.version>${project.name} Project, Version ${project.version}</display.name.version>
     </properties>
 
     <scm>
@@ -149,11 +152,62 @@
                     <archive>
                         <manifestEntries>
                             <Specification-Title>${batch.spec.title}</Specification-Title>
-                            <Specification-Vendor>${batch.spec.title}</Specification-Vendor>
+                            <Specification-Vendor>${batch.spec.vendor}</Specification-Vendor>
                             <Specification-Version>${batch.spec.version}</Specification-Version>
                         </manifestEntries>
                     </archive>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <header><![CDATA[<b>${display.name.version}</b>]]></header>
+                    <footer><![CDATA[<b>${display.name.version}</b>]]></footer>
+                    <bottom>
+                        <![CDATA[
+                    <p align="left">&#169; Copyright IBM Corp. 2014, 2019.<br>Use is subject to
+    <a href="{@docRoot}/doc-files/EFSL.html" target="_top">license terms</a>.]]>
+                    </bottom>
+                    <docfilessubdirs>true</docfilessubdirs>
+                    <doctitle>${display.name.version}</doctitle>
+                    <windowtitle>${display.name.version}</windowtitle>
+
+                    <archive>
+                        <index>true</index>
+                        <manifest>
+                            <addDefaultSpecificationEntries>
+                                true
+                            </addDefaultSpecificationEntries>
+                            <addDefaultImplementationEntries>
+                                true
+                            </addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Specification-Title>${batch.spec.title}</Specification-Title>
+                            <Specification-Vendor>${batch.spec.vendor}</Specification-Vendor>
+                            <Specification-Version>${batch.spec.version}</Specification-Version>
+                            <Implementation-URL>${project.url}</Implementation-URL>
+                            <Java-Version>${java.version}</Java-Version>
+                            <Java-Vendor>${java.vendor}</Java-Vendor>
+                            <Os-Name>${os.name}</Os-Name>
+                            <Os-Arch>${os.arch}</Os-Arch>
+                            <Os-Version>${os.version}</Os-Version>
+                            <Scm-Url>${project.scm.url}</Scm-Url>
+                            <Scm-Connection>${project.scm.connection}</Scm-Connection>
+                            <Scm-Revision>${buildNumber}</Scm-Revision>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
