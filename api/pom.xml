@@ -44,6 +44,7 @@
         <batch.api.version>1.0.2</batch.api.version>
         <version.jakarta.enterprise.jakarta.enterprise.cdi-api>2.0.1</version.jakarta.enterprise.jakarta.enterprise.cdi-api>
         <version.jakarta.inject.jakarta.inject-api>1.0</version.jakarta.inject.jakarta.inject-api>
+        <version.org.jboss.spec.javax.transaction.jboss-transaction-api_1.2_spec>2.0.0.CR1</version.org.jboss.spec.javax.transaction.jboss-transaction-api_1.2_spec>
 
         <display.name.version>${project.name} Project, Version ${project.version}</display.name.version>
     </properties>
@@ -77,6 +78,10 @@
                     <groupId>jakarta.interceptor</groupId>
                     <artifactId>jakarta.interceptor-api</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>javax.inject</groupId>
+                    <artifactId>javax.inject</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -87,9 +92,9 @@
         </dependency>
 
         <dependency>
-            <groupId>jakarta.transaction</groupId>
-            <artifactId>jakarta.transaction-api</artifactId>
-            <version>1.3.2</version>
+            <groupId>org.jboss.spec.javax.transaction</groupId>
+            <artifactId>jboss-transaction-api_1.2_spec</artifactId>
+            <version>${version.org.jboss.spec.javax.transaction.jboss-transaction-api_1.2_spec}</version>
         </dependency>
     </dependencies>
 
