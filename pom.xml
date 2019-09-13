@@ -138,8 +138,7 @@
         <version.java>1.6</version.java>
 
         <!-- Dependencies -->
-        <version.jakarta.enterprise.jakarta.enterprise.cdi-api>2.0.1</version.jakarta.enterprise.jakarta.enterprise.cdi-api>
-        <version.javax.enterprise.cdi-api>1.1</version.javax.enterprise.cdi-api>
+        <version.jakarta.enterprise.jakarta.enterprise.cdi-api>2.0.2</version.jakarta.enterprise.jakarta.enterprise.cdi-api>
         <version.jakarta.inject.jakarta.inject-api>1.0</version.jakarta.inject.jakarta.inject-api>
 
         <version.org.sonatype.plugins.nexus-staging-maven-plugin>1.6.6</version.org.sonatype.plugins.nexus-staging-maven-plugin>
