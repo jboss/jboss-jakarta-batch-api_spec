@@ -44,7 +44,7 @@
         <batch.api.version>1.0.2</batch.api.version>
         <version.jakarta.enterprise.jakarta.enterprise.cdi-api>2.0.1</version.jakarta.enterprise.jakarta.enterprise.cdi-api>
         <version.jakarta.inject.jakarta.inject-api>1.0</version.jakarta.inject.jakarta.inject-api>
-        <version.org.jboss.spec.javax.transaction.jboss-transaction-api_1.3_spec>2.0.0.CR1</version.org.jboss.spec.javax.transaction.jboss-transaction-api_1.3_spec>
+        <version.org.jboss.spec.javax.transaction.jboss-transaction-api_1.3_spec>2.0.0.Final</version.org.jboss.spec.javax.transaction.jboss-transaction-api_1.3_spec>
 
         <display.name.version>${project.name} Project, Version ${project.version}</display.name.version>
     </properties>
